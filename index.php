@@ -25,16 +25,51 @@
                 <th>Action</th>
             </thead>
             <tbody>
-                <td>10</td>
-                <td>Bill Gates</td>
-                <td>bill.gates@microsoft.com</td>
-                <td>+111222333</td>
-                <td>New York, USA</td>
-                <td>18/05/2022</td>
-                <td>
-                    <a href="/" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="/" class="btn btn-primary btn-sm">Delete</a>
-                </td>
+                <?php
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $database = "myshop";
+
+                //create conection
+                $connection = new mysqli($servername, $username, $password, $database);
+
+                //check conection
+                
+
+                if ($connection->connect_error){
+                    die("Connection failed: " . $connection->connect_error);
+                }
+
+                //read all rows from the database
+
+                $sql = "SELECT * FROM clients";
+                $result = $connection->query($sql);
+
+                if(!$result){
+                    die("invalid query: " . $connection->error);
+                }
+                
+                //read data
+                
+                while ($row = $result->fetch_assoc()) {
+                    echo "
+                    <tr>
+                        <td>$row[id]</td>
+                        <td>$row[name]</td>
+                        <td>$row[email]</td>
+                        <td>$row[phone]</td>
+                        <td>$row[address]</td>
+                        <td>$row[created_at]</td>
+                        <td>
+                            <a href='/myshop/edit.php?id=$row[id]' class='btn btn-primary btn-sm'>Edit</a>
+                            <a href='/myshop/delete.php?id=$row[id]' class='btn btn-primary btn-sm'>Delete</a>
+                        </td>
+                    </tr>
+                    ";
+                }
+                ?>
+
             </tbody>
         </table>
     </div>
